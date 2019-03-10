@@ -13,7 +13,7 @@ try:
                             database = "PREENCHER")
     print 'Conectando...'
     print '...'
-    criar_tabela = "CREATE TABLE clientes2 (id serial primary key, nome varchar(255), idade decimal, email varchar(255));"
+    criar_tabela = "CREATE TABLE clientes (id serial primary key, nome varchar(255), idade decimal, email varchar(255));"
     conn.cursor().execute(criar_tabela)
     print 'Criando tabela...'
     print '...'
