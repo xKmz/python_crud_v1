@@ -1,4 +1,4 @@
-# python_crude_v1
+# python_crud_v1
 
 Resultado de uma tarde de estudos com a linguagem Python 2.7 e PostgreSQL! 
 
