@@ -5,11 +5,11 @@ import psycopg2
 def conecta_banco():
     conexao = ''
     try:
-        conexao = psycopg2.connect(user = "postgres",
-                                password = "master",
-                                host = "localhost",
-                                port = "5432",
-                                database = "teste")
+        conexao = psycopg2.connect(user = "CONFIGURAR",
+                                password = "CONFIGURAR",
+                                host = "CONFIGURAR",
+                                port = "CONFIGURAR",
+                                database = "CONFIGURAR")
     except:
         print "Ops!!"
         erro_de_conexao()
