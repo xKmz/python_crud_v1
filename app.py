@@ -2,11 +2,12 @@
 
 import psycopg2
 
-conn = psycopg2.connect(user = "postgres",
-                                password = "master",
-                                host = "localhost",
-                                port = "5432",
-                                database = "teste")
+# Ajuste as configuracoes de sua conexao.
+conn = psycopg2.connect(user = "CONFIGURAR",
+                                password = "CONFIGURAR",
+                                host = "CONFIGURAR",
+                                port = "CONFIGURAR",
+                                database = "CONFIGURAR")
 cursor = conn.cursor()
 
 def cadastro():
