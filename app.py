@@ -236,8 +236,16 @@ def erro_de_conexao():
 def menu():
     escolha = ''
     print ' '
-    print 'Bem-vindo ao cadastro feliz! :D'
+    print '##################################################################'
+    print '#                                                                #'
+    print '#                Bem-vindo ao cadastro feliz! :D                 #'
+    print '#                                                                #'
+    print '#           Esperamos que você goste de nosso sistema!           #'
+    print '#                 Dúvidas e sugestões no github                  #'
+    print '#                                                                #'
+    print '##################################################################'
     print ' '
+    
     while(escolha != '0'):
         print ' '
         print '##################################################################'
