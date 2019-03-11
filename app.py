@@ -11,8 +11,8 @@ def conecta_banco():
                                 port = "5432",
                                 database = "teste")
     except:
-        print "Falha ao acessar o banco de dados."
-        print "Verifique as configurações de acesso."
+        print "Ops!!"
+        erro_de_conexao()
    
     return conexao
 
@@ -45,10 +45,7 @@ def cadastro():
             print ('Os dados de %s foram adicionados com sucesso!') % (nome)
 
         except:
-            print ' '
-            print "Falha ao acessar o banco de dados."
-            print "Verifique as configurações de acesso."
-            print ' '
+            erro_de_conexao()
         
         finally:
             conexao.close()
@@ -68,10 +65,7 @@ def lista():
                 print 'Nome: %s, Idade: %s, Email: %s' % (cliente[1], cliente[2], cliente[3])
         
         except:
-            print ' '
-            print "Falha ao acessar o banco de dados."
-            print "Verifique as configurações de acesso."
-            print ' '
+            erro_de_conexao()
 
         finally:
             conexao.close()
@@ -101,10 +95,7 @@ def remove():
                 print ' '
 
             except:
-                    print ' '
-                    print "Falha ao acessar o banco de dados."
-                    print "Verifique as configurações de acesso."
-                    print ' '
+                erro_de_conexao()
 
             finally:
                 conexao.close()
@@ -155,10 +146,7 @@ def alterar():
                         conexao.commit()
                     
                     except:
-                        print ' '
-                        print "Falha ao acessar o banco de dados."
-                        print "Verifique as configurações de acesso."
-                        print ' '
+                        erro_de_conexao()
 
                 elif(escolha == '2'):
                     print ' '
@@ -172,10 +160,7 @@ def alterar():
                         conexao.commit()
                     
                     except:
-                        print ' '
-                        print "Falha ao acessar o banco de dados."
-                        print "Verifique as configurações de acesso."
-                        print ' '
+                        erro_de_conexao()
 
                 elif(escolha == '3'):
                     print ' '
@@ -189,10 +174,7 @@ def alterar():
                         conexao.commit()
 
                     except:
-                        print ' '
-                        print "Falha ao acessar o banco de dados."
-                        print "Verifique as configurações de acesso."
-                        print ' '
+                        erro_de_conexao()
 
     except (Exception, psycopg2.Error) as error:
         print ' '
@@ -226,6 +208,31 @@ def procurar():
     finally:
         conexao.close()
 
+def exportar():
+    try:
+        conexao = conecta_banco()
+        cursor = conexao.cursor()
+        cursor.execute('SELECT * FROM clientes')
+        arquivo_export = open('clientes.csv','a')
+        for cliente in cursor.fetchall():
+            arquivo_export.write(" " + cliente[1] + ", " + str(cliente[2]) + ", " + cliente[3] + " \n")
+        arquivo_export.close()
+        print 'Clientes exportados com sucesso! :P'
+        print 'A tabela clientes.csv encontra-se no local de seu sistema!'
+        print ' '
+
+    except:
+        erro_de_conexao()
+
+    finally:
+        conexao.close()
+
+def erro_de_conexao():
+    print ' '
+    print "Falha ao acessar o banco de dados."
+    print "Verifique as configurações de acesso."
+    print ' '
+
 def menu():
     escolha = ''
     print ' '
@@ -237,7 +244,8 @@ def menu():
         print '#                                                                #'
         print '#                     Escolha uma opção:                         #'
         print '#               1) Cadastrar 2) Listar 3) Remover                #'
-        print '#                4) Alterar 5) Procurar 0) Sair                  #'
+        print '#           4) Alterar 5) Procurar 6) Exportar Clientes          #'
+        print '#                           0) Sair                              #'
         print '#                                                                #'
         print '##################################################################'
         print ' '
@@ -261,6 +269,9 @@ def menu():
         
         elif(escolha == '5'):
             procurar()
+        
+        elif(escolha == '6'):
+            exportar()
 
         else:
             print 'Opção inválida!'
