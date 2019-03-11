@@ -2,13 +2,19 @@
 
 import psycopg2
 
-# Ajuste as configuracoes de sua conexao.
-conn = psycopg2.connect(user = "CONFIGURAR",
-                                password = "CONFIGURAR",
-                                host = "CONFIGURAR",
-                                port = "CONFIGURAR",
-                                database = "CONFIGURAR")
-cursor = conn.cursor()
+def conecta_banco():
+    conexao = ''
+    try:
+        conexao = psycopg2.connect(user = "postgres",
+                                password = "master",
+                                host = "localhost",
+                                port = "5432",
+                                database = "teste")
+    except:
+        print "Falha ao acessar o banco de dados."
+        print "Verifique as configurações de acesso."
+   
+    return conexao
 
 def cadastro():
         print ' '
@@ -31,8 +37,10 @@ def cadastro():
         email = raw_input()
 
         try:
+            conexao = conecta_banco()
+            cursor = conexao.cursor()
             cursor.execute("INSERT INTO clientes (nome, idade, email) VALUES ('%s', '%s', '%s')" % (nome, idade, email))
-            conn.commit()
+            conexao.commit()
             print ' '
             print ('Os dados de %s foram adicionados com sucesso!') % (nome)
 
@@ -42,6 +50,9 @@ def cadastro():
             print "Verifique as configurações de acesso."
             print ' '
         
+        finally:
+            conexao.close()
+
 def lista():
         print ' '
         print '##################################################################'
@@ -50,6 +61,8 @@ def lista():
         print ' '
 
         try:
+            conexao = conecta_banco()
+            cursor = conexao.cursor()
             cursor.execute('SELECT * FROM clientes')
             for cliente in cursor.fetchall():
                 print 'Nome: %s, Idade: %s, Email: %s' % (cliente[1], cliente[2], cliente[3])
@@ -60,6 +73,9 @@ def lista():
             print "Verifique as configurações de acesso."
             print ' '
 
+        finally:
+            conexao.close()
+
 def remove():
     print ' '
     print '##################################################################'
@@ -69,6 +85,8 @@ def remove():
     nome = raw_input()
 
     try:
+        conexao = conecta_banco()
+        cursor = conexao.cursor()
         sql_select_query = "SELECT * FROM clientes WHERE nome = %s"
         cursor.execute(sql_select_query, (nome, ))
         cliente = cursor.fetchone()
@@ -77,7 +95,7 @@ def remove():
             try:
                 sql_delete_query = "DELETE FROM clientes WHERE nome = %s"
                 cursor.execute(sql_delete_query, (nome,))
-                conn.commit()
+                conexao.commit()
                 print ' '
                 print ('Os dados de %s foram removidos com sucesso!') % (nome)
                 print ' '
@@ -87,6 +105,9 @@ def remove():
                     print "Falha ao acessar o banco de dados."
                     print "Verifique as configurações de acesso."
                     print ' '
+
+            finally:
+                conexao.close()
 
     except (Exception, psycopg2.Error) as error:
         print ' '
@@ -101,6 +122,8 @@ def alterar():
     print ''
 
     try:
+        conexao = conecta_banco()
+        cursor = conexao.cursor()
         sql_select_query = "SELECT * FROM clientes WHERE nome = %s"
         cursor.execute(sql_select_query, (nome, ))
         cliente = cursor.fetchone()
@@ -129,7 +152,7 @@ def alterar():
                     try:
                         sql_update_query = "UPDATE clientes SET nome = %s WHERE id = %s"
                         cursor.execute(sql_update_query, (novo_nome, cliente[0]))
-                        conn.commit()
+                        conexao.commit()
                     
                     except:
                         print ' '
@@ -146,7 +169,7 @@ def alterar():
                     try:
                         sql_update_query = "UPDATE clientes SET idade = %s WHERE id = %s"
                         cursor.execute(sql_update_query, (nova_idade, cliente[0]))
-                        conn.commit()
+                        conexao.commit()
                     
                     except:
                         print ' '
@@ -163,7 +186,7 @@ def alterar():
                     try:
                         sql_update_query = "UPDATE clientes SET email = %s WHERE id = %s"
                         cursor.execute(sql_update_query, (novo_email, cliente[0]))
-                        conn.commit()
+                        conexao.commit()
 
                     except:
                         print ' '
@@ -176,6 +199,9 @@ def alterar():
         print("Poxa! O nome não existe :(")
         print ' '
 
+    finally:
+        conexao.close()
+
 def procurar():
     print ' '
     print 'Quem você gostaria de procurar?'
@@ -183,6 +209,8 @@ def procurar():
     nome_a_procurar = raw_input()
 
     try:
+        conexao = conecta_banco()
+        cursor = conexao.cursor()
         sql_select_query = "SELECT * FROM clientes WHERE nome = %s"
         cursor.execute(sql_select_query, (nome_a_procurar, ))
         resultado = cursor.fetchone()
@@ -194,6 +222,9 @@ def procurar():
         print ' '
         print("O nome não existe. Procure por outro nome :D")
         print ' '
+    
+    finally:
+        conexao.close()
 
 def menu():
     escolha = ''
